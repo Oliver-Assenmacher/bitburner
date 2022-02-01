@@ -5,7 +5,7 @@ const filesToDownload = [
   '/single/weaken.js',
   'opti2.js',
  ]
-const baseUrl = 'https://raw.githubusercontent.com/Oliver-Assenmacher/bitburner/main/'
+const baseUrl = 'https://raw.githubusercontent.com/Oliver-Assenmacher/bitburner/'
 
 /**
  * @param {NS} ns
