@@ -26,13 +26,13 @@ export async function main(ns) {
   ns.tprint(`Files downloaded.`)
 
   await ns.sleep(50)
-  ns.tprint(`Starting startup/run.js`)
-  ns.spawn('run.js', 1)
+  ns.tprint(`Starting opti2.js`)
+  ns.spawn('opti2.js', 1)
 }
 
 export async function download(ns, filename, branch) {
   const fileUrl = filename.includes("/") ? filename : "/" + filename;
   const path = baseUrl + branch + '/src' + fileUrl
   ns.tprint(`Trying to download ${path}`)
-  await ns.wget(path + '?ts=' + new Date().getTime(), filename)
+  await ns.wget(path, filename)
 }
