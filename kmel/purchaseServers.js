@@ -1,10 +1,10 @@
 export async function main(ns) {
-    ns.disableLog('ALL');
+    await ns.disableLog('ALL');
 
-    const serverCostMulti = ns.getPurchasedServerCost(16) / 16;
-    const maxNumServers = ns.getPurchasedServerLimit();
-    const maxMoney = ns.getServerMoneyAvailable('home') / maxNumServers;
-    const maxRam = ns.getPurchasedServerMaxRam('home');
+    const serverCostMulti = await ns.getPurchasedServerCost(16) / 16;
+    const maxNumServers = await ns.getPurchasedServerLimit();
+    const maxMoney = await ns.getServerMoneyAvailable('home') / maxNumServers;
+    const maxRam = await ns.getPurchasedServerMaxRam('home');
 
     // get servers with the minimum, predefined amount, but check if there is already
     // a higher configured pserv
@@ -25,24 +25,24 @@ export async function main(ns) {
         ramToBuy = maxRam;
     }
 
-    ns.print('Calculated: ' + ramToBuy + ' GB RAM for ' + serverCostMulti * ramToBuy + '$');
+    await ns.print('Calculated: ' + ramToBuy + ' GB RAM for ' + serverCostMulti * ramToBuy + '$');
     
-    const serverCost = ns.getPurchasedServerCost(ramToBuy);
+    const serverCost = await ns.getPurchasedServerCost(ramToBuy);
 
     var i = 0;
     while (i < maxNumServers) {
-        if (ns.getServerMoneyAvailable("home") > serverCost) {
-            if (!ns.serverExists('pserv-' + i) || ns.getServerRam('pserv-' + i)[0] < ramToBuy) {
+        if (await ns.getServerMoneyAvailable("home") > serverCost) {
+            if (!ns.serverExists('pserv-' + i) || await ns.getServerRam('pserv-' + i)[0] < ramToBuy) {
                 //if (maxMoney > serverCostMulti * ramToBuy) {
-                if (ns.serverExists('pserv-' + i)) {
-                    ns.killall('pserv-' + i);
+                if (await ns.serverExists('pserv-' + i)) {
+                    await ns.killall('pserv-' + i);
                     await ns.sleep(8000);
-                    ns.deleteServer('pserv-' + i);
+                    await ns.deleteServer('pserv-' + i);
                     await ns.sleep(5000);
                 }
 
                 if (!ns.serverExists('pserv-' + i)) {
-                    pServer = ns.purchaseServer('pserv-' + i, ramToBuy);
+                    pServer = await ns.purchaseServer('pserv-' + i, ramToBuy);
                     if (pServer) {
 
                         ns.print('Bought player server #' + i + ' with ' + ramToBuy + ' GB RAM for $' + serverCostMulti * ramToBuy);
