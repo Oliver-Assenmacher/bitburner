@@ -1,0 +1,98 @@
+// Array of all servers that don't need any ports opened
+// to gain root access. These have 16 GB of RAM
+var servers0Port = ["n00dles",
+    "sigma-cosmetics",
+    "joesguns",
+    "nectar-net",
+    "hong-fang-tea",
+    "foodnstuff",
+    "harakiri-sushi"];
+
+var servers1Port = ["neo-net",
+    "zer0",
+    "max-hardware",
+    "CSEC",
+    "iron-gym"];
+
+var servers2Port = ["silver-helix",
+    "phantasy",
+    "crush-fitness",
+    "omega-net",
+    "johnson-ortho",
+    "avmnite-02h",
+    "the-hub"];
+
+var servers3Port = ["comptek",
+    "netlink",
+    "summit-uni",
+    "rothman-uni",
+    "I.I.I.I",
+    "catalyst"];
+
+// Copy our scripts onto each server that requires 0 ports
+// to gain root access. Then use nuke() to gain admin access and
+// run the scripts.
+for (var i = 0; i < servers0Port.length; ++i) {
+    var serv = servers0Port[i];
+    nuke(serv);
+    exec("deploy.js", "home", 1, serv, "early-hack-template.js", "n00dles");
+}
+
+// Wait until we acquire the "BruteSSH.exe" program
+while (!fileExists("BruteSSH.exe")) {
+    sleep(60000);
+}
+
+// Copy our scripts onto each server that requires 1 port
+// to gain root access. Then use brutessh() and nuke()
+// to gain admin access and run the scripts.
+for (var i = 0; i < servers1Port.length; ++i) {
+    var serv = servers1Port[i];
+    brutessh(serv);
+    nuke(serv);
+    exec("deploy.js", "home", 1, serv, "early-hack-template.js", "joesguns");
+}
+
+if (!fileExists("FTPCrack.exe")) {
+    tprint ("no FTPCrack.exe -> exiting")
+    exit();
+}
+
+
+// Copy our scripts onto each server that requires 1 port
+// using deploy.js
+for (var i = 0; i < servers2Port.length; ++i) {
+    var serv = servers2Port[i];
+    var hackingLevelServer = getServerRequiredHackingLevel(serv);
+    var hackingLevelPlayer = getHackingLevel();
+    ftpcrack(serv);
+    brutessh(serv);
+    if (hackingLevelServer <= hackingLevelPlayer) {
+        nuke(serv);
+        exec("deploy.js", "home", 1, serv, "early-hack-template.js", "joesguns");
+    }
+}
+
+if (!fileExists("relaySMTP.exe")) {
+    tprint ("no relaySMTP.exe -> exiting")
+    exit();
+}
+
+for (var i = 0; i < servers3Port.length; ++i) {
+    var serv = servers3Port[i];
+    var hackingLevelServer = getServerRequiredHackingLevel(serv);
+    var hackingLevelPlayer = getHackingLevel();
+    ftpcrack(serv);
+    brutessh(serv);
+    relaysmtp(serv);
+    if (hackingLevelServer <= hackingLevelPlayer) {
+        nuke(serv);
+        exec("deploy.js", "home", 1, serv, "early-hack-template.js", "joesguns");
+    }
+}
+
+//for (var i = 0; i < 25; ++i) {
+//    var hostname = "s" + i;
+//    //tprint(hostname)
+//    exec("deploy.js", "home", 1, hostname, "early-hack-template.js");
+//}
